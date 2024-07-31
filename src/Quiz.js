@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './style.css';
 
 const questions = [
@@ -49,14 +49,9 @@ function Quiz() {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(1800); // 타이머 설정
 
-  const handleAnswer = (questionIndex, choice) => {
-    const newAnswers = [...answers];
-    newAnswers[questionIndex] = choice;
-    setAnswers(newAnswers);
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     let newScore = 0;
     answers.forEach((answer, index) => {
       if (answer === questions[index].correctAnswer) {
@@ -65,6 +60,28 @@ function Quiz() {
     });
     setScore(newScore);
     setSubmitted(true);
+  }, [answers]);
+
+  useEffect(() => {
+    if (page === 'quiz' && !submitted) {
+      const timer = setInterval(() => {
+        setTimeLeft(prevTime => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            handleSubmit();
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [page, submitted, handleSubmit]);
+
+  const handleAnswer = (questionIndex, choice) => {
+    const newAnswers = [...answers];
+    newAnswers[questionIndex] = choice;
+    setAnswers(newAnswers);
   };
 
   const getProgress = () => {
@@ -86,7 +103,7 @@ function Quiz() {
     return (
       <div className="quiz-container">
         <h1>시작하기</h1>
-        <button onClick={() => setPage('quiz')}></button>
+        <button onClick={() => setPage('quiz')}>시작</button>
       </div>
     );
   }
@@ -95,6 +112,7 @@ function Quiz() {
     <div className="quiz-container">
       <h1>모의고사</h1>
       <div className="progress-bar" style={{ width: `${getProgress()}%` }}></div>
+      <div className="timer">남은 시간: {timeLeft}초</div>
       {!submitted ? (
         <>
           {questions.map((q, index) => (
@@ -102,13 +120,11 @@ function Quiz() {
               <div className="question">{q.question}</div>
               <ul className="choices">
                 {q.choices.map((choice, choiceIndex) => (
-                  <li key={choiceIndex}>
-                    <input
-                      type="radio"
-                      name={`q${index}`}
-                      value={choice}
-                      onChange={() => handleAnswer(index, choice)}
-                    />
+                  <li
+                    key={choiceIndex}
+                    className={answers[index] === choice ? 'selected' : ''}
+                    onClick={() => handleAnswer(index, choice)}
+                  >
                     {choice}
                   </li>
                 ))}
