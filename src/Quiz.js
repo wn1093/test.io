@@ -4,12 +4,12 @@ import './style.css';
 const questions = [
   {
     question: "가장 좋아하는 데이트 장소는?",
-    choices: ["영화관", "카페", "공원"],
+    choices: ["영화관", "카페", "공원", "술집"],
     correctAnswer: "공원"
   },
   {
     question: "가장 좋아하는 음식은?",
-    choices: ["피자", "초밥", "파스타"],
+    choices: ["피자", "초밥", "파스타", "고기"],
     correctAnswer: "초밥"
   },
   {
@@ -19,8 +19,8 @@ const questions = [
   },
   {
     question: "가장 좋아하는 색깔은?",
-    choices: ["빨강", "파랑", "초록", "노랑"],
-    correctAnswer: "파랑"
+    choices: ["빨강색", "파랑색", "초록색", "검은색"],
+    correctAnswer: "파랑색"
   },
   {
     question: "가장 좋아하는 취미는?",
@@ -40,7 +40,32 @@ const questions = [
   {
     question: "가장 좋아하는 음악 장르는?",
     choices: ["팝", "록", "클래식", "재즈"],
-    correctAnswer: "클래식"
+    correctAnswer: "팝"
+  },
+  {
+    question: "가장 좋아하는 음료는?",
+    choices: ["커피", "차", "주스", "물"],
+    correctAnswer: "커피"
+  },
+  {
+    question: "가장 좋아하는 영화 장르는?",
+    choices: ["로맨스", "코미디", "액션", "공포"],
+    correctAnswer: "로맨스"
+  },
+  {
+    question: "가장 좋아하는 책 장르는?",
+    choices: ["소설", "자기계발", "역사", "과학"],
+    correctAnswer: "과학"
+  },
+  {
+    question: "가장 좋아하는 과일은?",
+    choices: ["사과", "바나나", "딸기", "포도"],
+    correctAnswer: "딸기"
+  },
+  {
+    question: "가장 좋아하는 운동은?",
+    choices: ["요가", "러닝", "수영", "헬스"],
+    correctAnswer: "헬스"
   }
 ];
 
@@ -110,7 +135,7 @@ function Quiz() {
 
   return (
     <div className="quiz-container">
-      <h1>모의고사</h1>
+      <h1>모의</h1>
       <div className="progress-bar" style={{ width: `${getProgress()}%` }}></div>
       <div className="timer">남은 시간: {timeLeft}초</div>
       {!submitted ? (
